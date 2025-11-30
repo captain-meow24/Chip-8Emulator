@@ -24,12 +24,25 @@ void Processor::decode(uint16_t current_instruction){
                         sp=sp-1;
                         //returns from a function
                         break;
-                        
-
-        }
-
-
-
+                 }
+            case 1:
+                uint16_t address = current_instruction & 0x0FFF;
+                pc = address;
+                break;
+            case 2:
+                uint16_t address = current_instruction & 0x0FFF;
+                sp++;
+                stack[sp]=pc;
+                pc=address;
+                break;
+            case 3:
+                //performsuminstruction();
+                uint16_t reg = current_instruction & 0x0F00;
+                uint16_t value= current_instruction & 0x00FF;
+                if (registers[reg]==value) {
+                    pc=pc+2;
+                }
+                break;
 
 
 
