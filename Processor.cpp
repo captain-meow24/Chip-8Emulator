@@ -11,8 +11,27 @@ void Processor::fetch() {
     decode(current_instruction);
 }
 
-void Processor::decode(uint16_t current_instruction) {
-    switch (current_instruction){
+void Processor::decode(uint16_t current_instruction){
+    uint16_t first_nibble = current_instruction >> 12;
+        switch (first_nibble) {
+            case 0x0:
+                switch (current_instruction){
+                case 0x00E0:
+                        //clear the display
+                        break;
+                case 0x00EE:
+                        pc = stack[sp];
+                        sp=sp-1;
+                        //returns from a function
+                        break;
+                        
+
+        }
+
+
+
+
+
 
     }
 
