@@ -28,7 +28,11 @@ public:
 
     void fetch();
     void decode(uint16_t current_instruction);
-    void execute();
+    void call_function(uint16_t current_instruction);
+    void compare_skip(uint16_t current_instruction);
+    void skip_compare(uint16_t current_instruction);
+    void skip_reg_equal(uint16_t current_instruction);
+    void set_reg_val(uint16_t current_instruction);
 };
 
 

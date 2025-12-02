@@ -26,28 +26,73 @@ void Processor::decode(uint16_t current_instruction){
                         break;
                  }
             case 1:
+                //jump to address nnn
+            {
                 uint16_t address = current_instruction & 0x0FFF;
                 pc = address;
+
                 break;
+            }
             case 2:
-                uint16_t address = current_instruction & 0x0FFF;
-                sp++;
-                stack[sp]=pc;
-                pc=address;
+                //calls a function, increments the stack pointer, puts the PC on the top of the stack, PC isset to nnn.
+                call_function(current_instruction);
+
+
                 break;
             case 3:
-                //performsuminstruction();
-                uint16_t reg = current_instruction & 0x0F00;
-                uint16_t value= current_instruction & 0x00FF;
-                if (registers[reg]==value) {
-                    pc=pc+2;
-                }
+                //compare and skip
+                compare_skip(current_instruction);
                 break;
-
-
+            case 4:
+                //compare and skip if Vx isn't equal to nn
+                skip_compare(current_instruction);
+                break;
+            case 5:
+                //compare registers and if they're equal, skip next instructions
+                skip_reg_equal(current_instruction);
+                break;
+            case 6:
+                //sets value of a register
+                set_reg_val(current_instruction);
+                break;
 
     }
 
+}
+
+void Processor::call_function(uint16_t current_instruction) {
+    uint16_t address = current_instruction & 0x0FFF;
+    sp++;
+    stack[sp] = pc;
+    pc=address;
+}
+
+void Processor::compare_skip(uint16_t current_instruction) {
+    uint16_t reg = current_instruction & 0x0F00;
+    uint16_t value= current_instruction & 0x00FF;
+    if (registers[reg]==value) {
+        pc=pc+2;
+    }
+}
+    void Processor::skip_compare(uint16_t current_instruction){
+        uint16_t reg = current_instruction & 0x0F00;
+        uint16_t value= current_instruction & 0x00FF;
+        if (registers[reg]!=value) {
+            pc=pc+2;
+    }
+}
+void Processor::skip_reg_equal(uint16_t current_instruction) {
+    uint16_t reg1 = current_instruction & 0x0F00;
+    uint16_t reg2 = current_instruction & 0x00F0;
+    if (registers[reg1] == registers[reg2]) {
+        pc=pc+2;
+    }
+
+}
+void Processor::set_reg_val(uint16_t current_instruction) {
+    uint16_t reg = current_instruction & 0x0F00;
+    uint16_t val = current_instruction & 0x00FF;
+   registers[reg] = val;
 
 }
 
