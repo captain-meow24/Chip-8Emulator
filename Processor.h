@@ -33,6 +33,11 @@ public:
     void skip_compare(uint16_t current_instruction);
     void skip_reg_equal(uint16_t current_instruction);
     void set_reg_val(uint16_t current_instruction);
+    void add_to_reg(uint16_t current_instruction);
+    void set_reg_x_as_y(uint16_t current_instruction);
+    void or_register(uint16_t current_instruction);
+    void and_reg(uint16_t current_instruction);
+
 };
 
 
