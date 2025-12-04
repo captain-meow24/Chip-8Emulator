@@ -37,6 +37,8 @@ public:
     void set_reg_x_as_y(uint16_t current_instruction);
     void or_register(uint16_t current_instruction);
     void and_reg(uint16_t current_instruction);
+    void xor_reg(uint16_t current_instruction);
+    void add_reg_carry(uint16_t current_instruction);
 
 };
 

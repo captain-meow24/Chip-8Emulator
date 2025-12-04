@@ -54,6 +54,18 @@ void Processor::decode(uint16_t current_instruction){
         case 7:
             add_to_reg(current_instruction);
             break;
+        case 8:
+            uint8_t last_nibble = current_instruction & 0x000F;
+            switch (last_nibble) {
+                case 0x0:
+                    set_reg_x_as_y(current_instruction);
+                    break;
+                case 0x1:
+                    or_register(current_instruction);
+
+
+            }
+
     }
 }
 
@@ -65,60 +77,71 @@ void Processor::call_function(uint16_t current_instruction) {
 }
 
 void Processor::compare_skip(uint16_t current_instruction) {
-    uint16_t reg = current_instruction & 0x0F00;
-    uint16_t value= current_instruction & 0x00FF;
+    uint8_t reg = (current_instruction & 0x0F00) >> 8;
+    uint8_t value= current_instruction & 0x00FF;
     if (registers[reg]==value) {
         pc=pc+2;
     }
 }
     void Processor::skip_compare(uint16_t current_instruction){
-        uint16_t reg = current_instruction & 0x0F00;
-        uint16_t value= current_instruction & 0x00FF;
+        uint8_t reg = (current_instruction & 0x0F00) >> 8;
+        uint8_t value= current_instruction & 0x00FF;
         if (registers[reg]!=value) {
             pc=pc+2;
     }
 }
 void Processor::skip_reg_equal(uint16_t current_instruction) {
-    uint16_t reg1 = current_instruction & 0x0F00;
-    uint16_t reg2 = current_instruction & 0x00F0;
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     if (registers[reg1] == registers[reg2]) {
         pc=pc+2;
     }
 
 }
 void Processor::set_reg_val(uint16_t current_instruction) {
-    uint16_t reg = current_instruction & 0x0F00;
-    uint16_t val = current_instruction & 0x00FF;
+    uint8_t reg = (current_instruction & 0x0F00) >> 4;
+    uint8_t val = current_instruction & 0x00FF;
    registers[reg] = val;
 }
 void Processor::add_to_reg(uint16_t current_instruction) {
-    uint16_t reg = current_instruction & 0x0F00;
-    uint16_t val = current_instruction & 0x00FF;
+    uint8_t reg = (current_instruction & 0x0F00) >> 8;
+    uint8_t val = current_instruction & 0x00FF;
     registers[reg] = registers[reg] + val;
 }
 void Processor::set_reg_x_as_y(uint16_t current_instruction) {
     //Stores the value of register Vy in register Vx
-    uint16_t reg1 = current_instruction & 0x0F00;
-    uint16_t reg2 = current_instruction & 0x00F0;
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     registers[reg1] = registers[reg2];
 }
 void Processor::or_register(uint16_t current_instruction) {
     //Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx.
-    uint16_t reg1 = current_instruction & 0x0F00;
-    uint16_t reg2 = current_instruction & 0x00F0;
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     registers[reg1] = registers[reg1] | registers[reg2];
 }
 void Processor::and_reg(uint16_t current_instruction) {
     //Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx
-    uint16_t reg1 = current_instruction & 0x0F00;
-    uint16_t reg2 = current_instruction & 0x00F0;
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     registers[reg1] = registers[reg1] & registers[reg2];
 }
 void Processor::xor_reg(uint16_t current_instruction) {
-    uint16_t reg1 = current_instruction & 0x0F00;
-    uint16_t reg2 = current_instruction & 0x00F0;
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     registers[reg1] = registers[reg1] ^ registers[reg2];
 }
-
+void Processor::add_reg_carry(uint16_t current_instruction) {
+    //The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
+    if ( (registers[reg1] + registers[reg2]) >255) {
+        registers[0xF] = 1;
+    }
+    else {
+        registers[0xF] = 0;
+    }
+    registers[reg1]= registers[reg1] + registers[reg2];
+}
 
 
