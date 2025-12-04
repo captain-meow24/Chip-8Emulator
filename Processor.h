@@ -39,6 +39,7 @@ public:
     void and_reg(uint16_t current_instruction);
     void xor_reg(uint16_t current_instruction);
     void add_reg_carry(uint16_t current_instruction);
+    void i_8xy5(uint16_t current_instruction);
 
 };
 
