@@ -21,11 +21,6 @@ public:
     std::uint32_t video[64*32]{};
     std::uint16_t index{}; // used to store the current address of the sprite
 
-    Processor() {
-        memory[513] = 0x66;
-        memory[514] = 0x12;
-    }
-
     void fetch();
     void decode(uint16_t current_instruction);
     void call_function(uint16_t current_instruction);
@@ -40,9 +35,15 @@ public:
     void xor_reg(uint16_t current_instruction);
     void add_reg_carry(uint16_t current_instruction);
     void i_8xy5(uint16_t current_instruction);
+    void i_8xy6(uint16_t current_instruction);
+    void i_8xy7(uint16_t current_instruction);
+    void i_8xyE(uint16_t current_instruction);
+    void i_9xy0(uint16_t current_instruction);
+    void Annn(uint16_t current_instruction);
+    void Bnnn(uint16_t current_instruction);
+    void cxkk(uint16_t current_instruction);
+
 
 };
-
-
 
 #endif //PROCESSOR_H

@@ -2,6 +2,8 @@
 // Created by kanishka on 26/11/25.
 //
 #include<cstdint>
+#include<cstdlib>
+#include<ctime>
 #include "Processor.h"
 
 void Processor::fetch() {
@@ -24,37 +26,37 @@ void Processor::decode(uint16_t current_instruction){
                     //returns from a function
                     break;
                  }
-        case 1:
+        case 0x1:
             //jump to address nnn
         {
             uint16_t address = current_instruction & 0x0FFF;
             pc = address;
             break;
         }
-        case 2:
+        case 0x2:
             //calls a function, increments the stack pointer, puts the PC on the top of the stack, PC isset to nnn.
             call_function(current_instruction);
             break;
-        case 3:
+        case 0x3:
             //compare and skip
             compare_skip(current_instruction);
                 break;
-        case 4:
+        case 0x4:
             //compare and skip if Vx isn't equal to nn
             skip_compare(current_instruction);
             break;
-        case 5:
+        case 0x5:
             //compare registers and if they're equal, skip next instructions
             skip_reg_equal(current_instruction);
             break;
-        case 6:
+        case 0x6:
             //sets value of a register
             set_reg_val(current_instruction);
             break;
-        case 7:
+        case 0x7:
             add_to_reg(current_instruction);
             break;
-        case 8:
+        case 0x8:
             uint8_t last_nibble = current_instruction & 0x000F;
             switch (last_nibble) {
                 case 0x0:
@@ -72,8 +74,19 @@ void Processor::decode(uint16_t current_instruction){
                     i_8xy5(current_instruction);
                 case 0x6:
                     i_8xy6(current_instruction);
+                case 0x7:
+                    i_8xy7(current_instruction);
+                case 0xE:
+                    i_8xyE(current_instruction);
             }
-
+        case 0x9:
+            i_9xy0(current_instruction);
+        case 0xA:
+            Annn(current_instruction);
+        case 0xB:
+            Bnnn(current_instruction);
+        case 0xC:
+            cxkk(current_instruction);
     }
 }
 
@@ -83,7 +96,6 @@ void Processor::call_function(uint16_t current_instruction) {
     stack[sp] = pc;
     pc=address;
 }
-
 void Processor::compare_skip(uint16_t current_instruction) {
     uint8_t reg = (current_instruction & 0x0F00) >> 8;
     uint8_t value= current_instruction & 0x00FF;
@@ -104,7 +116,6 @@ void Processor::skip_reg_equal(uint16_t current_instruction) {
     if (registers[reg1] == registers[reg2]) {
         pc=pc+2;
     }
-
 }
 void Processor::set_reg_val(uint16_t current_instruction) {
     uint8_t reg = (current_instruction & 0x0F00) >> 4;
@@ -195,4 +206,10 @@ void Processor::Annn(uint16_t current_instruction) {
 }
 void Processor::Bnnn(uint16_t current_instruction) {
     pc = (current_instruction & 0x0FFF) + registers[0x0];
+}
+void Processor::cxkk(uint16_t current_instruction) {
+    uint8_t randomb = std::rand() % 256;
+    uint8_t val = current_instruction & 0x00FF;
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    registers[reg1] = val & randomb;
 }
