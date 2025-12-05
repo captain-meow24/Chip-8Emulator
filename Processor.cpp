@@ -183,3 +183,16 @@ void Processor::i_8xyE(uint16_t current_instruction) {
     registers[0xF] = (registers[reg1] & 0b10000000) >> 7;
     registers[reg1] = registers[reg1] << 0x1;
 }
+void Processor::i_9xy0(uint16_t current_instruction) {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
+    if (registers[reg1] != registers[reg2]) {
+        pc=pc+2;
+    }
+}
+void Processor::Annn(uint16_t current_instruction) {
+    index = current_instruction & 0x0FFF;
+}
+void Processor::Bnnn(uint16_t current_instruction) {
+    pc = (current_instruction & 0x0FFF) + registers[0x0];
+}
