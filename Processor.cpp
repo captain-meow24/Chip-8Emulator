@@ -56,7 +56,7 @@ void Processor::decode(uint16_t current_instruction){
         case 0x7:
             add_to_reg(current_instruction);
             break;
-        case 0x8:
+        case 0x8: {
             uint8_t last_nibble = current_instruction & 0x000F;
             switch (last_nibble) {
                 case 0x0:
@@ -64,29 +64,43 @@ void Processor::decode(uint16_t current_instruction){
                     break;
                 case 0x1:
                     or_register(current_instruction);
+                    break;
                 case 0x2:
                     and_reg(current_instruction);
+                    break;
                 case 0x3:
                     xor_reg(current_instruction);
+                    break;
                 case 0x4:
                     add_reg_carry(current_instruction);
+                    break;
                 case 0x5:
                     i_8xy5(current_instruction);
+                    break;
                 case 0x6:
                     i_8xy6(current_instruction);
+                    break;
                 case 0x7:
                     i_8xy7(current_instruction);
+                    break;
                 case 0xE:
                     i_8xyE(current_instruction);
+                    break;
             }
+        }
+            break;
         case 0x9:
             i_9xy0(current_instruction);
+            break;
         case 0xA:
             Annn(current_instruction);
+            break;
         case 0xB:
             Bnnn(current_instruction);
+            break;
         case 0xC:
             cxkk(current_instruction);
+            break;
     }
 }
 
