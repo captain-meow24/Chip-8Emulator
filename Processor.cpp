@@ -68,6 +68,10 @@ void Processor::decode(uint16_t current_instruction){
                     xor_reg(current_instruction);
                 case 0x4:
                     add_reg_carry(current_instruction);
+                case 0x5:
+                    i_8xy5(current_instruction);
+                case 0x6:
+                    i_8xy6(current_instruction);
             }
 
     }
@@ -158,4 +162,24 @@ void Processor::i_8xy5(uint16_t current_instruction) {
     }
     registers[reg1] = registers[reg1] - registers[reg2];
 }
-
+void Processor::i_8xy6(uint16_t current_instruction) {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    registers[0xF] = registers[reg1] & 0x1;
+    registers[reg1] = registers[reg1] >> 1;
+}
+void Processor::i_8xy7(uint16_t current_instruction) {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
+    if (registers[reg1] < registers[reg2]) {
+        registers[0xF] = 1;
+    }
+    else {
+        registers[0xF] = 0;
+    }
+    registers[reg1] = registers[reg2] - registers[reg1];
+}
+void Processor::i_8xyE(uint16_t current_instruction) {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    registers[0xF] = (registers[reg1] & 0b10000000) >> 7;
+    registers[reg1] = registers[reg1] << 0x1;
+}
