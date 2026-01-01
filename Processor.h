@@ -18,8 +18,10 @@ public:
     std::uint8_t soundTimer{};
     std::uint8_t keypad[16]{};
     std::uint16_t opcode{};
-    std::uint32_t video[64*32]{};
-    std::uint16_t index{}; // used to store the current address of the sprite
+    //std::uint32_t video[64*32]{};
+    std::uint16_t index{}; //stores the current address of the sprite
+    std:: uint8_t screen[64*32]{};
+    //index = y * 64 + x;
 
     void fetch();
     void decode(uint16_t current_instruction);
@@ -42,6 +44,9 @@ public:
     void Annn(uint16_t current_instruction);
     void Bnnn(uint16_t current_instruction);
     void cxkk(uint16_t current_instruction);
+    void display(uint8_t screen[]){};
+
+
 
 
 };
