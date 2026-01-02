@@ -9,6 +9,19 @@
 #include<cstdint>
 
 
+class display {
+public:
+    Tigr* window;
+    display(){
+    window = tigrWindow(64, 32, "Chip-8",0);
+
+        }
+    void draw(Tigr* window, uint8_t* screen);
+    ~display() {
+        tigrFree(window);
+    }
+
+};
 
 
 #endif //DISPLAY_H
