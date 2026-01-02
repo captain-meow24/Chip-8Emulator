@@ -3,10 +3,12 @@
 //
 
 #include "display.h"
+#include <thread>
+#include <chrono>
 
 void display:: draw(Tigr* window, uint8_t* screen) {
     while (!tigrClosed(window)) {
-        
+
         tigrClear(window, tigrRGB(244, 194, 194));
 
         for (int y = 0; y < 32; y++)
@@ -22,4 +24,5 @@ void display:: draw(Tigr* window, uint8_t* screen) {
 
         tigrUpdate(window);
     }
+    std::this_thread::sleep_for(std::chrono::milliseconds(16));
 }
