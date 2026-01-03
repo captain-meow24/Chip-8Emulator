@@ -13,7 +13,7 @@ uint16_t Processor::fetch() {
     return current_instruction;
 }
 
-void Processor::decode(uint16_t current_instruction){
+void Processor::decode(){
     uint16_t first_nibble = current_instruction >> 12;
     switch (first_nibble) {
         case 0x0:
@@ -36,75 +36,79 @@ void Processor::decode(uint16_t current_instruction){
         }
         case 0x2:
             //calls a function, increments the stack pointer, puts the PC on the top of the stack, PC isset to nnn.
-            call_function(current_instruction);
+            call_function();
             break;
         case 0x3:
             //compare and skip
-            compare_skip(current_instruction);
+            compare_skip();
                 break;
         case 0x4:
             //compare and skip if Vx isn't equal to nn
-            skip_compare(current_instruction);
+            skip_compare();
             break;
         case 0x5:
             //compare registers and if they're equal, skip next instructions
-            skip_reg_equal(current_instruction);
+            skip_reg_equal();
             break;
         case 0x6:
             //sets value of a register
-            set_reg_val(current_instruction);
+            set_reg_val();
             break;
         case 0x7:
-            add_to_reg(current_instruction);
+            add_to_reg();
             break;
         case 0x8: {
             uint8_t last_nibble = current_instruction & 0x000F;
             switch (last_nibble) {
                 case 0x0:
-                    set_reg_x_as_y(current_instruction);
+                    set_reg_x_as_y();
                     break;
                 case 0x1:
-                    or_register(current_instruction);
+                    or_register();
                     break;
                 case 0x2:
-                    and_reg(current_instruction);
+                    and_reg();
                     break;
                 case 0x3:
-                    xor_reg(current_instruction);
+                    xor_reg();
                     break;
                 case 0x4:
-                    add_reg_carry(current_instruction);
+                    add_reg_carry();
                     break;
                 case 0x5:
-                    i_8xy5(current_instruction);
+                    i_8xy5();
                     break;
                 case 0x6:
-                    i_8xy6(current_instruction);
+                    i_8xy6();
                     break;
                 case 0x7:
-                    i_8xy7(current_instruction);
+                    i_8xy7();
                     break;
                 case 0xE:
-                    i_8xyE(current_instruction);
+                    i_8xyE();
                     break;
             }
         }
             break;
         case 0x9:
-            i_9xy0(current_instruction);
+            i_9xy0();
             break;
         case 0xA:
-            Annn(current_instruction);
+            Annn();
             break;
         case 0xB:
-            Bnnn(current_instruction);
+            Bnnn();
             break;
         case 0xC:
-            cxkk(current_instruction);
+            cxkk();
             break;
-        case 0xD:
-            break
-        case 0xE:
+        case 0xD: {
+            uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+            uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
+            uint8_t n = current_instruction & 0x000F;
+            break;
+        }
+        case 0xE: {
             uint16_t last_two = current_instruction & 0x00FF;
             switch (last_two) {
                 case 0x9E:
@@ -112,6 +116,8 @@ void Processor::decode(uint16_t current_instruction){
                 case 0xA1:
                     break;
             }
+        }
+            break;
         case 0xF:
             uint16_t last_two = current_instruction & 0x00FF;
             switch (last_two) {
@@ -140,67 +146,67 @@ void Processor::decode(uint16_t current_instruction){
     }
 }
 
-void Processor::call_function(uint16_t current_instruction) {
+void Processor::call_function() {
     uint16_t address = current_instruction & 0x0FFF;
     sp++;
     stack[sp] = pc;
     pc=address;
 }
-void Processor::compare_skip(uint16_t current_instruction) {
+void Processor::compare_skip() {
     uint8_t reg = (current_instruction & 0x0F00) >> 8;
     uint8_t value= current_instruction & 0x00FF;
     if (registers[reg]==value) {
         pc=pc+2;
     }
 }
-    void Processor::skip_compare(uint16_t current_instruction){
+    void Processor::skip_compare(){
         uint8_t reg = (current_instruction & 0x0F00) >> 8;
         uint8_t value= current_instruction & 0x00FF;
         if (registers[reg]!=value) {
             pc=pc+2;
     }
 }
-void Processor::skip_reg_equal(uint16_t current_instruction) {
+void Processor::skip_reg_equal() {
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     if (registers[reg1] == registers[reg2]) {
         pc=pc+2;
     }
 }
-void Processor::set_reg_val(uint16_t current_instruction) {
+void Processor::set_reg_val() {
     uint8_t reg = (current_instruction & 0x0F00) >> 4;
     uint8_t val = current_instruction & 0x00FF;
    registers[reg] = val;
 }
-void Processor::add_to_reg(uint16_t current_instruction) {
+void Processor::add_to_reg() {
     uint8_t reg = (current_instruction & 0x0F00) >> 8;
     uint8_t val = current_instruction & 0x00FF;
     registers[reg] = registers[reg] + val;
 }
-void Processor::set_reg_x_as_y(uint16_t current_instruction) {
+void Processor::set_reg_x_as_y() {
     //Stores the value of register Vy in register Vx
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     registers[reg1] = registers[reg2];
 }
-void Processor::or_register(uint16_t current_instruction) {
+void Processor::or_register() {
     //Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx.
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     registers[reg1] = registers[reg1] | registers[reg2];
 }
-void Processor::and_reg(uint16_t current_instruction) {
+void Processor::and_reg() {
     //Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     registers[reg1] = registers[reg1] & registers[reg2];
 }
-void Processor::xor_reg(uint16_t current_instruction) {
+void Processor::xor_reg() {
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     registers[reg1] = registers[reg1] ^ registers[reg2];
 }
-void Processor::add_reg_carry(uint16_t current_instruction) {
+void Processor::add_reg_carry() {
     //The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
@@ -212,7 +218,7 @@ void Processor::add_reg_carry(uint16_t current_instruction) {
     }
     registers[reg1]= registers[reg1] + registers[reg2];
 }
-void Processor::i_8xy5(uint16_t current_instruction) {
+void Processor::i_8xy5() {
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     if (registers[reg1] > registers[reg2]) {
@@ -223,12 +229,12 @@ void Processor::i_8xy5(uint16_t current_instruction) {
     }
     registers[reg1] = registers[reg1] - registers[reg2];
 }
-void Processor::i_8xy6(uint16_t current_instruction) {
+void Processor::i_8xy6() {
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     registers[0xF] = registers[reg1] & 0x1;
     registers[reg1] = registers[reg1] >> 1;
 }
-void Processor::i_8xy7(uint16_t current_instruction) {
+void Processor::i_8xy7() {
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     if (registers[reg1] < registers[reg2]) {
@@ -239,25 +245,25 @@ void Processor::i_8xy7(uint16_t current_instruction) {
     }
     registers[reg1] = registers[reg2] - registers[reg1];
 }
-void Processor::i_8xyE(uint16_t current_instruction) {
+void Processor::i_8xyE() {
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     registers[0xF] = (registers[reg1] & 0b10000000) >> 7;
     registers[reg1] = registers[reg1] << 0x1;
 }
-void Processor::i_9xy0(uint16_t current_instruction) {
+void Processor::i_9xy0() {
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
     if (registers[reg1] != registers[reg2]) {
         pc=pc+2;
     }
 }
-void Processor::Annn(uint16_t current_instruction) {
+void Processor::Annn() {
     index = current_instruction & 0x0FFF;
 }
-void Processor::Bnnn(uint16_t current_instruction) {
+void Processor::Bnnn() {
     pc = (current_instruction & 0x0FFF) + registers[0x0];
 }
-void Processor::cxkk(uint16_t current_instruction) {
+void Processor::cxkk() {
     uint8_t randomb = std::rand() % 256;
     uint8_t val = current_instruction & 0x00FF;
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;

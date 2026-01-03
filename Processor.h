@@ -21,33 +21,31 @@ public:
     //std::uint32_t video[64*32]{};
     std::uint16_t index{}; //stores the current address of the sprite
     std:: uint8_t screen[64*32]{};
-    //index = y * 64 + x;
     std::uint16_t current_instruction;
 
     uint16_t fetch();
-    void decode(uint16_t current_instruction);
-    void call_function(uint16_t current_instruction);
-    void compare_skip(uint16_t current_instruction);
-    void skip_compare(uint16_t current_instruction);
-    void skip_reg_equal(uint16_t current_instruction);
-    void set_reg_val(uint16_t current_instruction);
-    void add_to_reg(uint16_t current_instruction);
-    void set_reg_x_as_y(uint16_t current_instruction);
-    void or_register(uint16_t current_instruction);
-    void and_reg(uint16_t current_instruction);
-    void xor_reg(uint16_t current_instruction);
-    void add_reg_carry(uint16_t current_instruction);
-    void i_8xy5(uint16_t current_instruction);
-    void i_8xy6(uint16_t current_instruction);
-    void i_8xy7(uint16_t current_instruction);
-    void i_8xyE(uint16_t current_instruction);
-    void i_9xy0(uint16_t current_instruction);
-    void Annn(uint16_t current_instruction);
-    void Bnnn(uint16_t current_instruction);
-    void cxkk(uint16_t current_instruction);
-    void display(uint8_t screen[]){};
-
-
+    void decode();
+    void call_function();
+    void compare_skip();
+    void skip_compare();
+    void skip_reg_equal();
+    void set_reg_val();
+    void add_to_reg();
+    void set_reg_x_as_y();
+    void or_register();
+    void and_reg();
+    void xor_reg();
+    void add_reg_carry();
+    void i_8xy5();
+    void i_8xy6();
+    void i_8xy7();
+    void i_8xyE();
+    void i_9xy0();
+    void Annn();
+    void Bnnn();
+    void cxkk();
+    //void display(uint8_t screen[]);
+    void dyxn();
 
 
 };
