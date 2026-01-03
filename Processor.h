@@ -22,8 +22,9 @@ public:
     std::uint16_t index{}; //stores the current address of the sprite
     std:: uint8_t screen[64*32]{};
     //index = y * 64 + x;
+    std::uint16_t current_instruction;
 
-    void fetch();
+    uint16_t fetch();
     void decode(uint16_t current_instruction);
     void call_function(uint16_t current_instruction);
     void compare_skip(uint16_t current_instruction);

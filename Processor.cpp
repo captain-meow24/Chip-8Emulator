@@ -6,10 +6,11 @@
 #include<ctime>
 #include "Processor.h"
 
-void Processor::fetch() {
-    uint16_t current_instruction = memory[pc] << 8;
+uint16_t Processor::fetch() {
+    current_instruction = memory[pc] << 8;
     current_instruction = current_instruction | memory[pc+1];
-    decode(current_instruction);
+    pc++;
+    return current_instruction;
 }
 
 void Processor::decode(uint16_t current_instruction){
@@ -101,6 +102,41 @@ void Processor::decode(uint16_t current_instruction){
         case 0xC:
             cxkk(current_instruction);
             break;
+        case 0xD:
+            break
+        case 0xE:
+            uint16_t last_two = current_instruction & 0x00FF;
+            switch (last_two) {
+                case 0x9E:
+                    break;
+                case 0xA1:
+                    break;
+            }
+        case 0xF:
+            uint16_t last_two = current_instruction & 0x00FF;
+            switch (last_two) {
+                case 0x07:
+                    break;
+                case 0x0A:
+                    break;
+                case 0x15:
+                    break;
+                case 0x18:
+                    break;
+                case 0x1E:
+                    break;
+                case 0x29:
+                    break;
+                case 0x33:
+                    break;
+                case 0x55:
+                    break;
+                case 0x65:
+                    break;
+            }
+
+            break;
+
     }
 }
 
