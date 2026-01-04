@@ -102,12 +102,8 @@ void Processor::decode(){
         case 0xC:
             cxkk();
             break;
-        case 0xD: {
-            uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
-            uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
-            uint8_t n = current_instruction & 0x000F;
+        case 0xD:
             break;
-        }
         case 0xE: {
             uint16_t last_two = current_instruction & 0x00FF;
             switch (last_two) {
@@ -268,4 +264,23 @@ void Processor::cxkk() {
     uint8_t val = current_instruction & 0x00FF;
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     registers[reg1] = val & randomb;
+}
+void Processor::dxyn() {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    uint8_t reg2 = (current_instruction & 0x00F0) >> 4;
+    uint8_t n = current_instruction & 0x000F;
+    uint8_t x = registers[reg1];
+    uint8_t y= registers[reg2];
+    uint8_t spr;
+    for (int i=0; i<n; i++) {
+        spr = memory[index];
+        for (int j=0; j<8; j++) {
+            screen[(y*64)+(x%64)] = screen[(y*64)+(x%64)] ^ (spr  ;
+            x++;
+        }
+        y++;
+        index++;
+    }
+    draw(window, screen);
+
 }

@@ -45,7 +45,7 @@ public:
     void Bnnn();
     void cxkk();
     //void display(uint8_t screen[]);
-    void dyxn();
+    void dxyn();
 
 
 };
