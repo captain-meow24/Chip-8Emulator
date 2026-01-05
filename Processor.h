@@ -4,8 +4,8 @@
 
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
-
 #include<cstdint>
+#include "display.h"
 
 class Processor {
 public:
@@ -22,6 +22,7 @@ public:
     std::uint16_t index{}; //stores the current address of the sprite
     std:: uint8_t screen[64*32]{};
     std::uint16_t current_instruction;
+    display disp;
 
     uint16_t fetch();
     void decode();

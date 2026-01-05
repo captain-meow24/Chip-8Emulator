@@ -9,7 +9,7 @@
 uint16_t Processor::fetch() {
     current_instruction = memory[pc] << 8;
     current_instruction = current_instruction | memory[pc+1];
-    pc++;
+    pc+=2;
     return current_instruction;
 }
 
@@ -103,11 +103,13 @@ void Processor::decode(){
             cxkk();
             break;
         case 0xD:
+            dxyn();
             break;
         case 0xE: {
             uint16_t last_two = current_instruction & 0x00FF;
             switch (last_two) {
                 case 0x9E:
+                    ex9e();
                     break;
                 case 0xA1:
                     break;
@@ -272,15 +274,39 @@ void Processor::dxyn() {
     uint8_t x = registers[reg1];
     uint8_t y= registers[reg2];
     uint8_t spr;
+    registers[0xF] = 0;
     for (int i=0; i<n; i++) {
-        spr = memory[index];
-        for (int j=0; j<8; j++) {
-            screen[(y*64)+(x%64)] = screen[(y*64)+(x%64)] ^ (spr  ;
-            x++;
-        }
-        y++;
-        index++;
-    }
-    draw(window, screen);
 
+        spr = memory[index +i];
+        for (int j=0; j<8; j++) {
+
+            uint8_t spritePixel = (spr >> (7 - j)) & 1;
+                if(screen[(((y+i)%32)*64) + ((x+j)%64)]==1 && spritePixel==1 ){
+
+                registers[0xF] = 1;
+            }
+
+           screen[(((y+i)%32)*64) + ((x+j)%64)] ^= spritePixel;
+
+        }
+
+    }
+    disp.draw(disp.window,screen);
+
+}
+void Processor::ex9e() {
+    uint8_t x = (current_instruction & 0x0F00) >> 8;
+    uint8_t key = registers[x] & 0x0F;
+
+    if (keypad[key]) {
+        pc += 2;
+    }
+}
+void Processor::exa1() {
+    uint8_t x = (current_instruction & 0x0F00) >> 8;
+    uint8_t key = registers[x] & 0x0F;
+    if (keypad[key]) {
+        return;
+    }
+    pc += 2;
 }
