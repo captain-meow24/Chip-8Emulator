@@ -138,12 +138,16 @@ void Processor::decode(){
                     fx1e();
                     break;
                 case 0x29:
+                    fx29();
                     break;
                 case 0x33:
+                    fx33();
                     break;
                 case 0x55:
+                    fx55();
                     break;
                 case 0x65:
+                    fx65();
                     break;
             }
 
@@ -343,3 +347,26 @@ void Processor:: fx1e() {
     uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
     index = index + registers[reg1];
 }
+void Processor:: fx29() {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    uint8_t digit = registers[reg1];
+    index = digit * 5;
+}
+void Processor::fx33() {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    uint8_t value = registers[reg1];
+    memory[index]     = value / 100;
+    memory[index + 1] = (value / 10) % 10;
+    memory[index + 2] = value % 10;
+}
+void Processor::fx55() {
+    for (int i=0; i< 0xF; i++) {
+        memory[index + i]= registers[i];
+    }
+}
+void Processor::fx65() {
+
+}
+
+
+
