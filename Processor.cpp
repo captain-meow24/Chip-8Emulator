@@ -126,12 +126,16 @@ void Processor::decode(){
                     fx07();
                     break;
                 case 0x0A:
+                    fx0a();
                     break;
                 case 0x15:
+                    fx15();
                     break;
                 case 0x18:
+                    fx18();
                     break;
                 case 0x1E:
+                    fx1e();
                     break;
                 case 0x29:
                     break;
@@ -326,4 +330,16 @@ void Processor::fx0a() {
         registers[reg1] = keymap[input];
     }
     //only press valid key
+}
+void Processor:: fx15() {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    delayTimer = registers[reg1];
+}
+void Processor:: fx18() {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    soundTimer = registers[reg1];
+}
+void Processor:: fx1e() {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    index = index + registers[reg1];
 }

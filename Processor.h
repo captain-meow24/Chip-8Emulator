@@ -30,8 +30,6 @@ public:
         {'a', 0x7}, {'s', 0x8}, {'d', 0x9}, {'f', 0xE},
         {'z', 0xA}, {'x', 0x0}, {'c', 0xB}, {'v', 0xF}
     };
-
-
     std::uint16_t opcode{};
     //std::uint32_t video[64*32]{};
     std::uint16_t index{}; //stores the current address of the sprite
@@ -66,6 +64,10 @@ public:
     void exa1();
     void fx07();
     void fx0a();
+    void fx15();
+    void fx18();
+    void fx1e();
+
 
 };
 
