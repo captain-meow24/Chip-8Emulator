@@ -6,6 +6,8 @@
 #include<ctime>
 #include "Processor.h"
 
+#include <iostream>
+
 uint16_t Processor::fetch() {
     current_instruction = memory[pc] << 8;
     current_instruction = current_instruction | memory[pc+1];
@@ -112,6 +114,7 @@ void Processor::decode(){
                     ex9e();
                     break;
                 case 0xA1:
+                    exa1();
                     break;
             }
         }
@@ -120,6 +123,7 @@ void Processor::decode(){
             uint16_t last_two = current_instruction & 0x00FF;
             switch (last_two) {
                 case 0x07:
+                    fx07();
                     break;
                 case 0x0A:
                     break;
@@ -309,4 +313,17 @@ void Processor::exa1() {
         return;
     }
     pc += 2;
+}
+void Processor::fx07() {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    registers[reg1] = delayTimer;
+}
+void Processor::fx0a() {
+    uint8_t reg1 = (current_instruction & 0x0F00) >> 8;
+    char input;
+    std::cin >> input;
+    if (keymap.find(input) != keymap.end()) {
+        registers[reg1] = keymap[input];
+    }
+    //only press valid key
 }
