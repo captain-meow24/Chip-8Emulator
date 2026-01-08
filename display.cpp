@@ -7,7 +7,7 @@
 #include <chrono>
 
 void display:: draw(Tigr* window, uint8_t* screen) {
-        tigrClear(window, tigrRGB(244, 194, 194));
+       // tigrClear(window, tigrRGB(244, 194, 194));
 
         for (int y = 0; y < 32; y++)
         {
