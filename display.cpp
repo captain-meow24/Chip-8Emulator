@@ -15,7 +15,7 @@ void display:: draw(Tigr* window, uint8_t* screen) {
             {
                 if (screen[x + y * 64])
                 {
-                    tigrPlot(window, x, y, tigrRGB(255, 255, 255));
+                    tigrPlot(window, x, y, tigrRGB(0, 0, 0));
                 }
             }
         }

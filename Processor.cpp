@@ -8,11 +8,10 @@
 
 #include <iostream>
 
-uint16_t Processor::fetch() {
+void Processor::fetch() {
     current_instruction = memory[pc] << 8;
     current_instruction = current_instruction | memory[pc+1];
     pc+=2;
-    return current_instruction;
 }
 
 void Processor::decode(){
@@ -29,6 +28,7 @@ void Processor::decode(){
                     //returns from a function
                     break;
                  }
+            break;
         case 0x1:
             //jump to address nnn
         {
@@ -119,7 +119,7 @@ void Processor::decode(){
             }
         }
             break;
-        case 0xF:
+        case 0xF: {
             uint16_t last_two = current_instruction & 0x00FF;
             switch (last_two) {
                 case 0x07:
@@ -150,10 +150,11 @@ void Processor::decode(){
                     fx65();
                     break;
             }
-
+        }
             break;
 
     }
+
 }
 
 void Processor::call_function() {
@@ -365,7 +366,10 @@ void Processor::fx55() {
     }
 }
 void Processor::fx65() {
-
+    uint8_t regX = (current_instruction & 0x0F00) >> 8;
+    for (int i = 0; i <= regX; ++i) {
+        registers[i] = memory[index + i];
+    }
 }
 
 

@@ -37,7 +37,7 @@ public:
     std::uint16_t current_instruction;
     display disp;
 
-    uint16_t fetch();
+    void fetch();
     void decode();
     void call_function();
     void compare_skip();
