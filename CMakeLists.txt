@@ -8,6 +8,7 @@ add_executable(Chip_8Emulator
         Processor.cpp
         display.cpp
         tigr.c
+        File_handling.cpp
 )
 
 # REQUIRED system libraries for Tigr (Linux)
