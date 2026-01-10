@@ -14,5 +14,6 @@
 class File_handling {
 public:
     void reads(std::string path, Processor* processor);
+    void writes(std::string path, Processor* processor);
 };
 #endif //FILE_HANDLING_H

@@ -3,6 +3,8 @@
 //
 
 #include "File_handling.h"
+
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 
@@ -23,3 +25,20 @@ void File_handling::reads(std::string path, Processor* processor) {
         j++;
     }
 }
+
+void File_handling::writes(std::string path, Processor* processor) {
+    std::ofstream file(path, std::ios::app | std::ios::binary);
+    if (!file) return;
+
+    file.put(processor->pc >> 8);
+    file.put(processor->pc & 0xFF);
+
+    for (int i = 0; i < 16; ++i) {
+        file.put(processor->registers[i]);
+    }
+
+    file.close();
+}
+
+
+
