@@ -1,6 +1,6 @@
 # Chip-8Emulator
 
-Chip-8 is a simple processor with sixteen 8-bit wide registers and 4KB of memory that stores instructions and sprit data from address 0x200 and up. I implemented fetch, decode and execute cycle in my emulator.
+Chip-8 is a simple processor with sixteen 8-bit wide registers and 4KB of memory that stores instructions and sprite data from address 0x200 and up. I implemented fetch, decode and execute cycle in my emulator.
 
 ## Fetch
 
