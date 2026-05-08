@@ -17,7 +17,7 @@ Chip-8 has 4KB of memory. From address 0x50 to 0x9F, we store built-in sprites f
 Chip-8 also has a 16 level stack to keep track of function calls, whenever a function is called, the PC address of the next instruction without the function call (PC+2 byte) is pushed onto the stack and the top address is popped when a function returns.
 
 ## Display
-I used Tigr to render display, the emulator, as of now, is capable of making complex visual patterns and animations possible within the constraint of a 62x32 pixel monochrome display (baby pink for the background and black for the sprites).
+I used Tigr to render display, the emulator, as of now, is capable of making complex visual patterns and animations possible within the constraint of a 64x32 pixel monochrome display (baby pink for the background and black for the sprites).
 
 Below is a screenshot of the result from running IBM logo test on it. 
 
